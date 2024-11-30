@@ -11,6 +11,7 @@ import edit from "./edit.png";
 import home from "./home.png";
 import logoutIcon from "./logout.png";
 import notif from "./notif.png";
+import updateCompanyIcon from "./updateCompany.png"; // New menu icon for "Update Company"
 
 const db = getFirestore();
 
@@ -51,6 +52,8 @@ const MainPage: React.FC = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  const isAdviser = user?.role === "Adviser";
+
   return (
     <div className={`layout ${isDarkMode ? "dark" : ""}`}>
       {/* Sidebar */}
@@ -70,7 +73,7 @@ const MainPage: React.FC = () => {
               </div>
               <div className="sidebar-user-info">
                 <p className="sidebar-user-name">{user.name?.toUpperCase()}</p>
-                <p className="sidebar-user-role">Student</p>
+                <p className="sidebar-user-role">{isAdviser ? "Adviser" : "Student"}</p>
               </div>
             </>
           )}
@@ -89,6 +92,11 @@ const MainPage: React.FC = () => {
           <a href="#">
             <img src={edit} alt="Edit Icon" className="menu-icon" /> Edit Student Information
           </a>
+          {isAdviser && (
+            <a href="#">
+              <img src={updateCompanyIcon} alt="Update Company Icon" className="menu-icon" /> Update Company
+            </a>
+          )}
           <a href="#" onClick={handleLogout} className="logout">
             <img src={logoutIcon} alt="Logout Icon" className="menu-icon" /> Log Out
           </a>
@@ -108,9 +116,19 @@ const MainPage: React.FC = () => {
         </div>
 
         <div className="content-grid">
-          <div className="content-box">Box 1</div>
-          <div className="content-box">Box 2</div>
-          <div className="content-box">Box 3</div>
+          {isAdviser ? (
+            <>
+              <div className="content-box">Adviser Box 1</div>
+              <div className="content-box">Adviser Box 2</div>
+              <div className="content-box">Adviser Box 3</div>
+            </>
+          ) : (
+            <>
+              <div className="content-box">Student Box 1</div>
+              <div className="content-box">Student Box 2</div>
+              <div className="content-box">Student Box 3</div>
+            </>
+          )}
         </div>
       </div>
 

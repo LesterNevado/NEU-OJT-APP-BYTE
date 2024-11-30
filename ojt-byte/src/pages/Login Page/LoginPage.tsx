@@ -33,15 +33,21 @@ const LoginPage: React.FC = () => {
 
   const saveUserData = async (user: any) => {
     try {
-      const userDoc = doc(db, "users", user.uid); // Reference to Firestore document
+      // Explicitly set role for the faculty email
+      const role =
+        user.email === "jcesperanza@neu.edu.ph" ? "Adviser" : "Student";
+  
+      const userDoc = doc(db, "users", user.uid);
       await setDoc(userDoc, {
         uid: user.uid,
         name: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
+        role, // Save role in Firestore
         createdAt: new Date().toISOString(),
       });
-      //console.log("User data saved successfully.");
+  
+      console.log("User data saved successfully with role:", role);
     } catch (error) {
       console.error("Error saving user data:", error);
     }
