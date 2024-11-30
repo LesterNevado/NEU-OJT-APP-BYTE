@@ -21,9 +21,9 @@ const LoginPage: React.FC = () => {
         await saveUserData(user);
         navigate("/main"); // Navigate to the main page
       } else {
-        // Restrict non-@neu.edu.ph emails
+        // Restrict non institutional emails
         await signOut(auth);
-        alert("Only @neu.edu.ph email addresses are allowed.");
+        alert("Only institutional email addresses are allowed.");
       }
     } catch (error) {
       console.error("Error signing in with Google:", error);
@@ -41,7 +41,7 @@ const LoginPage: React.FC = () => {
         photoURL: user.photoURL,
         createdAt: new Date().toISOString(),
       });
-      console.log("User data saved successfully.");
+      //console.log("User data saved successfully.");
     } catch (error) {
       console.error("Error saving user data:", error);
     }
