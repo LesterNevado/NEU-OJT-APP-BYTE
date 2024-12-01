@@ -4,7 +4,7 @@ import neu_logo from "./NEU LOGO.png";
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../../services/firebase";
 import { signInWithPopup, signOut } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 const db = getFirestore(); // Initialize Firestore
 
@@ -21,33 +21,43 @@ const LoginPage: React.FC = () => {
         await saveUserData(user);
         navigate("/main"); // Navigate to the main page
       } else {
-        // Restrict non institutional emails
+        // Restrict non-institutional emails
         await signOut(auth);
         alert("Only institutional email addresses are allowed.");
       }
     } catch (error) {
       console.error("Error signing in with Google:", error);
-      alert("Login failed: ${error.message}");
+      alert("Login failed!");
     }
   };
 
   const saveUserData = async (user: any) => {
     try {
-      // Explicitly set role for the faculty email
-      const role =
-        user.email === "jcesperanza@neu.edu.ph" ? "Adviser" : "Student";
-  
       const userDoc = doc(db, "users", user.uid);
-      await setDoc(userDoc, {
-        uid: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        role, // Save role in Firestore
-        createdAt: new Date().toISOString(),
-      });
+      const userSnapshot = await getDoc(userDoc);
+
+      
+      if (!userSnapshot.exists()) {
+        // Only save data for new users
+
+        // Explicitly set role for the adviser email
+        // jcesperanza@neu.edu.ph = adviser email
+        const role =  
+          user.email === "jcesperanza@neu.edu.ph" ? "Adviser" : "Student";
   
-      console.log("User data saved successfully with role:", role);
+        await setDoc(userDoc, {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          role, // Save role in Firestore
+          createdAt: new Date().toISOString(),
+        });
+  
+        console.log("New user data saved successfully with role:", role);
+      } else {
+        console.log("User data already exists, no update performed.");
+      }
     } catch (error) {
       console.error("Error saving user data:", error);
     }

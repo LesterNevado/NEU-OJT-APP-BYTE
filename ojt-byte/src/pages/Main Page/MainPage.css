@@ -171,6 +171,7 @@ body {
 }
 
 .theme-toggle-btn:hover {
+  background-color: transparent;
   transform: scale(1.1);
 }
 
