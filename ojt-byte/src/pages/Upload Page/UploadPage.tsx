@@ -1,58 +1,112 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import "./UploadPage.css";
 
 const UploadRequirements: React.FC = () => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const storage = getStorage();
+  const [files, setFiles] = useState({
+    resume: null as File | null,
+    parentConsent: null as File | null,
+    medicalExam: null as File | null,
+    psychologyExam: null as File | null,
+  });
+  const [progress, setProgress] = useState<Record<string, number>>({});
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState<string | null>(null);
 
-  const handleBrowseClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click(); // Trigger the file input click
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+    const file = e.target.files?.[0];
+    if (file && file.type !== "application/pdf") {
+      setError("Only PDF files are allowed.");
+      return;
     }
+    setError("");
+    setFiles((prev) => ({
+      ...prev,
+      [field]: file,
+    }));
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      console.log("Files selected:", files); // Handle file selection logic
-    }
+  const uploadFileToFirebase = (file: File, field: string) => {
+    return new Promise<void>((resolve, reject) => {
+      const fileRef = ref(storage, `requirements/${field}/${file.name}`);
+      const uploadTask = uploadBytesResumable(fileRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progressPercent = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress((prev) => ({ ...prev, [field]: progressPercent }));
+        },
+        (error) => reject(error),
+        async () => {
+          await getDownloadURL(uploadTask.snapshot.ref);
+          resolve();
+        }
+      );
+    });
   };
 
-  const uploadedFiles = [
-    { name: "file1.pdf", progress: 100 },
-    { name: "logo_large.pdf", progress: 100 },
-    { name: "logo_compressed.png", progress: 80 },
-    { name: "notes.txt", progress: 50 },
-    { name: "logo_final.pdf", progress: 20 },
-  ];
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!files.resume || !files.parentConsent || !files.medicalExam || !files.psychologyExam) {
+      setError("Please upload all required documents.");
+      return;
+    }
+    setError("");
+    setSuccess(null);
+
+    try {
+      await Promise.all(
+        Object.entries(files).map(([field, file]) => {
+          if (file) return uploadFileToFirebase(file as File, field);
+          return Promise.resolve();
+        })
+      );
+      setSuccess("All files uploaded successfully!");
+    } catch (err) {
+      console.error("Error uploading files:", err);
+      setError("An error occurred while uploading files.");
+    }
+  };
 
   return (
     <div className="upload-container">
       <div className="upload-box">
-        <h1>Drag and Drop files to upload</h1>
-        <p>or</p>
-        <button type="button" onClick={handleBrowseClick}>
-          Browse
-        </button>
-        <input
-          type="file"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
-      </div>
+        <h1>Upload Your Files</h1>
+        {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
 
-      <div className="uploaded-files">
-        <h2>Uploaded Files</h2>
-        <ul>
-          {uploadedFiles.map((file, index) => (
-            <li key={index}>
-              <span className="file-name">{file.name}</span>
-              <div className="progress-bar">
-                <span style={{ width: `${file.progress}%` }}></span>
+        <form onSubmit={handleSubmit}>
+          {["resume", "parentConsent", "medicalExam", "psychologyExam"].map((field) => (
+            <div key={field} className="upload-item">
+              <div className="file-info">
+                <span className="file-label">
+                  {field
+                    .replace(/([A-Z])/g, " $1")
+                    .replace(/^./, (str) => str.toUpperCase())}:
+                </span>
+                <input
+                  type="file"
+                  id={`${field}-upload`}
+                  accept=".pdf"
+                  onChange={(e) => handleFileChange(e, field)}
+                />
               </div>
-            </li>
+              {progress[field] != null && (
+                <div className="progress-wrapper">
+                  <div className="progress-bar">
+                    <span style={{ width: `${progress[field]}%` }}></span>
+                  </div>
+                  <span className="progress-text">{progress[field]}%</span>
+                </div>
+              )}
+            </div>
           ))}
-        </ul>
+          <button type="submit">Upload</button>
+        </form>
       </div>
     </div>
   );
