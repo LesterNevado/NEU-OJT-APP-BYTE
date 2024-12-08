@@ -1,96 +1,96 @@
-/* Base theme container */
-.theme-container.day {
-  background-color: #ffffff;
-  color: #333;
-}
-
-.theme-container.night {
-  background-color: #333;
-  color: #f9f9f9;
-}
-
-/* Excluded Upload Section */
 .upload-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f9f9f9;
-  font-family: Arial, sans-serif;
+  background-color: #f0f8fa;
+  font-family: "Inter", Arial, sans-serif;
+  color: #333;
 }
 
 .upload-box {
-  width: 400px;
-  padding: 20px;
+  width: 500px;
+  padding: 30px;
   border-radius: 15px;
-  text-align: center;
   background-color: #fff;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .upload-box h1 {
-  font-size: 20px;
+  text-align: center;
   margin-bottom: 20px;
-  color: #333;
 }
 
-.upload-box p {
-  margin: 10px 0;
-  font-size: 14px;
-  color: #666;
+.upload-item {
+  margin-bottom: 20px;
 }
 
-.upload-box button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.upload-box button:hover {
-  background-color: #0056b3;
-}
-
-.uploaded-files {
-  margin-top: 20px;
-}
-
-.uploaded-files h2 {
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-.uploaded-files ul {
-  list-style: none;
-  padding: 0;
-}
-
-.uploaded-files li {
+.file-info {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  justify-content: space-between;
 }
 
-.file-name {
+.file-label {
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+input[type="file"] {
   flex: 1;
-  font-size: 14px;
-  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.progress-wrapper {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .progress-bar {
-  width: 50%;
+  flex: 1;
+  height: 8px;
   background-color: #e0e0e0;
   border-radius: 5px;
   overflow: hidden;
-  margin-left: 10px;
-  height: 8px;
+  margin-right: 10px;
 }
 
 .progress-bar span {
   display: block;
   height: 100%;
-  background-color: #007bff;
+  background-color: #3498db;
+  transition: width 0.4s ease;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #7f8c8d;
+}
+
+button {
+  width: 100%;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #27ae60;
+}
+
+.error-message {
+  color: #e74c3c;
+  text-align: center;
+}
+
+.success-message {
+  color: #2ecc71;
+  text-align: center;
 }
