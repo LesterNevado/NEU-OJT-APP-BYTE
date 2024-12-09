@@ -1,95 +1,186 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import "./EditPage.css";
 
-interface StudentDetails {
+
+interface User {
+  uid: string;
   firstName: string;
   lastName: string;
   email: string;
   course: string;
-  year: string;
+  section: string;
+  academicYear: string;
+  semester: string;
+  adviser: string;
+  [key: string]: any; // Allows for additional properties
 }
 
+
+interface OutletContextProps {
+  user: User;
+}
+
+
 const EditStudentInfo: React.FC = () => {
-  const [details, setDetails] = useState<StudentDetails>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    course: '',
-    year: '',
-  });
+  const { user } = useOutletContext<OutletContextProps>();
+  const db = getFirestore();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+  const [formData, setFormData] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+
+  const fetchUserData = async () => {
+    try {
+      const userDoc = doc(db, "users", user.uid);
+      const docSnap = await getDoc(userDoc);
+ 
+      if (docSnap.exists()) {
+        const data = docSnap.data() as User;
+ 
+        // Extract first and last name from email if not already in Firestore
+        if (!data.firstName || !data.lastName) {
+          const emailNamePart = user.email.split("@")[0]; // Get the part before '@'
+          const [extractedFirstName, ...rest] = emailNamePart.split(/[._]/); // Split by dot or underscore
+          const extractedLastName = rest.join(" "); // Join remaining parts as last name
+ 
+          data.firstName = extractedFirstName || "";
+          data.lastName = extractedLastName || "";
+        }
+ 
+        setFormData({ ...data });
+      } else {
+        setError("No user data found.");
+      }
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      setError("Failed to fetch user data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setDetails(prevDetails => ({
-      ...prevDetails,
-      [name]: value,
-    }));
+    setFormData((prev) => prev && { ...prev, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log(details);
+    if (!formData) return;
+
+
+    try {
+      const userDoc = doc(db, "users", formData.uid);
+      await updateDoc(userDoc, formData);
+      alert("Student information updated successfully!");
+      window.location.reload();
+    } catch (err) {
+      console.error("Error updating student info:", err);
+      setError("Failed to update student information.");
+    }
   };
+
+
+  useEffect(() => {
+    if (user) fetchUserData();
+  }, [user]);
+
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
 
   return (
-    <div className="container">
-      <img src="path/to/profile-icon.jpg" alt="Profile Icon" className="profile-icon" />
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={details.firstName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={details.lastName}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={details.email}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="course">Course:</label>
-          <input
-            type="text"
-            id="course"
-            name="course"
-            value={details.course}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="year">Year:</label>
-          <input
-            type="text"
-          id="year"
-          name="year"
-          value={details.year}
-          onChange={handleChange}
-        />
-      </div>
-      <button type="submit">Save</button>
-    </form>
-  </div>
+    <div className="edit-student-info">
+      <h1>Edit Student Information</h1>
+      {formData && (
+        <form onSubmit={handleSubmit}>
+          <label>
+            First Name:
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Last Name:
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              disabled
+            />
+          </label>
+          <label>
+            Course:
+            <input
+              type="text"
+              name="course"
+              value={formData.course}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Section:
+            <input
+              type="text"
+              name="section"
+              value={formData.section}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Academic Year:
+            <input
+              type="text"
+              name="academicYear"
+              value={formData.academicYear}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Semester:
+            <input
+              type="text"
+              name="semester"
+              value={formData.semester}
+              onChange={handleInputChange}
+            />
+          </label>
+          <label>
+            Adviser:
+            <input
+              type="text"
+              name="adviser"
+              value={formData.adviser}
+              onChange={handleInputChange}
+            />
+          </label>
+          <button type="submit">Update</button>
+        </form>
+      )}
+    </div>
   );
 };
+
 
 export default EditStudentInfo;
