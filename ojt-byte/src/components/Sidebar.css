@@ -35,6 +35,7 @@
 }
 
 .sidebar.collapsed .hamburger-btn {
+  top: 15px;
   right: 10px;
 }
 
@@ -50,7 +51,7 @@
 }
 
 .sidebar-logo {
-  width: 40px;
+  width: 30px; /* Adjusted width to make the logo smaller */
   margin-right: 10px;
 }
 
@@ -118,6 +119,17 @@
   display: flex;
   align-items: center;
   width: 100%;
+  justify-content: center; /* Center horizontally */
+}
+
+.sidebar-user-background {
+  background-color: #37474f;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
 }
 
 .sidebar-user-image {
@@ -125,8 +137,17 @@
   height: 60px;
   border-radius: 50%;
   border: 2px solid #ffca28;
-  margin-right: 15px;
+  margin-right: 15px; /* Add margin-right to create space */
 }
+
+.sidebar-user.collapsed .sidebar-user-background {
+  justify-content: center; /* Center horizontally when collapsed */
+}
+
+.sidebar-user.collapsed .sidebar-user-image {
+  margin: 0; /* Remove margin to center the image */
+}
+
 
 .sidebar-user-info {
   text-align: left;
