@@ -6,7 +6,7 @@ import { auth, googleProvider } from "../../services/firebase";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
-const db = getFirestore(); // Initialize Firestore
+const db = getFirestore();
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,11 +17,11 @@ const LoginPage: React.FC = () => {
       const user = result.user;
 
       if (user.email && user.email.endsWith("@neu.edu.ph")) {
-        // Save user data to Firestore
+      
         await saveUserData(user);
-        navigate("/main"); // Navigate to the main page
+        navigate("/main"); 
       } else {
-        // Restrict non-institutional emails
+       
         await signOut(auth);
         alert("Only institutional email addresses are allowed.");
       }
@@ -38,10 +38,7 @@ const LoginPage: React.FC = () => {
 
       
       if (!userSnapshot.exists()) {
-        // Only save data for new users
-
-        // Explicitly set role for the adviser email
-        // jcesperanza@neu.edu.ph = adviser email
+       
         const role =  
           user.email === "jcesperanza@neu.edu.ph" ? "Adviser" : "Student";
   
@@ -50,7 +47,7 @@ const LoginPage: React.FC = () => {
           name: user.displayName,
           email: user.email,
           photoURL: user.photoURL,
-          role, // Save role in Firestore
+          role, 
           createdAt: new Date().toISOString(),
         });
   
