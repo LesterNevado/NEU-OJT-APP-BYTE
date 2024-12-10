@@ -24,7 +24,7 @@ const MainPage: React.FC = () => {
 
         if (docSnap.exists()) {
           const userData = docSnap.data();
-          setUser({ ...userData, uid: currentUser.uid }); // Include uid
+          setUser({ ...userData, uid: currentUser.uid }); 
           setIsAdviser(userData?.role === "Adviser");
         } else {
           console.error("No user data found in Firestore.");
@@ -37,7 +37,7 @@ const MainPage: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      setUser(null); // Clear user state
+      setUser(null); 
       await auth.signOut();
       navigate("/login");
     } catch (error) {

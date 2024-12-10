@@ -1,6 +1,6 @@
 .welcome h1, .login h1 {
   color: white;
-  text-shadow: 3px 3px 8px black;  /* Thicker black shadow */
+  text-shadow: 3px 3px 8px black;  
 }
 
 .login-page {

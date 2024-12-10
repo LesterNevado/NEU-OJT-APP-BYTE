@@ -12,23 +12,23 @@ const Routes = createBrowserRouter([
   },
   {
     path: "/",
-    element: <LoginPage />, // Redirect "/" to the Login Page
+    element: <LoginPage />, 
   },
   {
     path: "/main",
-    element: <MainPage />, // MainPage serves as the layout
+    element: <MainPage />, 
     children: [
       {
-        index: true, // Default child route for "/main"
-        element: <HomePage />, // Home Page
+        index: true, 
+        element: <HomePage />, 
       },
       {
         path: "upload",
-        element: <UploadPage />, // Upload Page
+        element: <UploadPage />, 
       },
       {
         path: "edit",
-        element: <EditPage /> // Edit Page
+        element: <EditPage /> 
       }
     ],
   },

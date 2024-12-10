@@ -1,9 +1,10 @@
 import React from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, Link } from "react-router-dom";
 import "../../pages/Main Page/MainPage.css";
+import "./HomePage.css";
 
 interface MainContentProps {
-  user: any; // Replace with proper type if you have a User type
+  user: any; 
   isAdviser: boolean;
 }
 
@@ -20,15 +21,27 @@ const HomePage: React.FC = () => {
       <div className="content-grid">
         {isAdviser ? (
           <>
-            <div className="content-box">Adviser Box 1</div>
-            <div className="content-box">Adviser Box 2</div>
-            <div className="content-box">Adviser Box 3</div>
+            <Link to="/adviser/feature1" className="content">
+              Adviser Box 1
+            </Link>
+            <Link to="/adviser/feature2" className="content">
+              Adviser Box 2
+            </Link>
+            <Link to="/adviser/feature3" className="content">
+              Adviser Box 3
+            </Link>
           </>
         ) : (
           <>
-            <div className="content-box">Student Box 1</div>
-            <div className="content-box">Student Box 2</div>
-            <div className="content-box">Student Box 3</div>
+            <Link to="/main/edit" className="content-box feature1">
+              Edit Information
+            </Link>
+            <Link to="/main/upload" className="content-box feature2">
+              Upload Requirements
+            </Link>
+            <Link to="" className="content-box feature3">
+              Generate Endorsement Letter
+            </Link>
           </>
         )}
       </div>

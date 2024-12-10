@@ -15,7 +15,7 @@ interface User {
   academicYear: string;
   semester: string;
   adviser: string;
-  [key: string]: any; // Allows for additional properties
+  [key: string]: any; 
 }
 
 
@@ -42,12 +42,11 @@ const EditStudentInfo: React.FC = () => {
       if (docSnap.exists()) {
         const data = docSnap.data() as User;
  
-        // Extract first and last name from email if not already in Firestore
         if (!data.firstName || !data.lastName) {
-          const emailNamePart = user.email.split("@")[0]; // Get the part before '@'
-          const [extractedFirstName, ...rest] = emailNamePart.split(/[._]/); // Split by dot or underscore
-          const extractedLastName = rest.join(" "); // Join remaining parts as last name
- 
+          const emailNamePart = user.email.split("@")[0]; 
+          const [extractedFirstName, ...rest] = emailNamePart.split(/[._]/); 
+          const extractedLastName = rest.join(" "); 
+          
           data.firstName = extractedFirstName || "";
           data.lastName = extractedLastName || "";
         }
