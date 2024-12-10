@@ -1,3 +1,7 @@
+.welcome h1, .login h1 {
+  color: white; /* Ensure the font color is white */
+}
+
 .login-page {
   display: flex;
   flex-direction: column;

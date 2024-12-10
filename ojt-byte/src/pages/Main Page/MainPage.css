@@ -160,19 +160,26 @@ body {
 
 /* Theme Toggle Button */
 .theme-toggle-btn {
-  background-color: transparent;
+  background-color: #f0c808; /* Matches the sunny yellow color */
   border: none;
-  font-size: 24px;
+  border-radius: 50%; /* Makes the button circular */
+  width: 50px; /* Adjust size */
+  height: 50px; /* Adjust size */
   cursor: pointer;
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  transition: transform 0.3s ease;
+  position: fixed; /* Keeps it fixed in position */
+  bottom: 20px; /* Distance from the bottom */
+  right: 20px; /* Distance from the right */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  z-index: 1000; /* Ensure visibility above other elements */
 }
 
-.theme-toggle-btn:hover {
-  background-color: transparent;
-  transform: scale(1.1);
+.theme-toggle-btn .icon {
+  font-size: 24px; /* Icon size */
+  color: #333; /* Icon color */
 }
 
 /* Content grid layout */
