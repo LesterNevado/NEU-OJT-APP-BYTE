@@ -4,9 +4,9 @@ import neu_logo from "./NEU LOGO.png";
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../../services/firebase";
 import { signInWithPopup, signOut } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
-const db = getFirestore(); // Initialize Firestore
+const db = getFirestore();
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,31 +17,44 @@ const LoginPage: React.FC = () => {
       const user = result.user;
 
       if (user.email && user.email.endsWith("@neu.edu.ph")) {
-        // Save user data to Firestore
+      
         await saveUserData(user);
-        navigate("/main"); // Navigate to the main page
+        navigate("/main"); 
       } else {
-        // Restrict non institutional emails
+       
         await signOut(auth);
         alert("Only institutional email addresses are allowed.");
       }
     } catch (error) {
       console.error("Error signing in with Google:", error);
-      alert("Login failed: ${error.message}");
+      alert("Login failed!");
     }
   };
 
   const saveUserData = async (user: any) => {
     try {
-      const userDoc = doc(db, "users", user.uid); // Reference to Firestore document
-      await setDoc(userDoc, {
-        uid: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-        createdAt: new Date().toISOString(),
-      });
-      //console.log("User data saved successfully.");
+      const userDoc = doc(db, "users", user.uid);
+      const userSnapshot = await getDoc(userDoc);
+
+      
+      if (!userSnapshot.exists()) {
+       
+        const role =  
+          user.email === "jcesperanza@neu.edu.ph" ? "Adviser" : "Student";
+  
+        await setDoc(userDoc, {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          role, 
+          createdAt: new Date().toISOString(),
+        });
+  
+        console.log("New user data saved successfully with role:", role);
+      } else {
+        console.log("User data already exists, no update performed.");
+      }
     } catch (error) {
       console.error("Error saving user data:", error);
     }

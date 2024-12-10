@@ -1,4 +1,3 @@
-/* Default light mode */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -11,13 +10,11 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark mode */
 .layout.dark {
   background-color: #121212;
   color: white;
 }
 
-/* Sidebar styles */
 .sidebar {
   width: 300px;
   height: 100vh;
@@ -158,23 +155,29 @@ body {
   height: 30px;
 }
 
-/* Theme Toggle Button */
 .theme-toggle-btn {
-  background-color: transparent;
+  background-color: #f0c808; 
   border: none;
-  font-size: 24px;
+  border-radius: 50%; 
+  width: 50px; 
+  height: 50px; 
   cursor: pointer;
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  transition: transform 0.3s ease;
+  position: fixed; 
+  bottom: 20px; 
+  right: 20px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  z-index: 1000; 
 }
 
-.theme-toggle-btn:hover {
-  transform: scale(1.1);
+.theme-toggle-btn .icon {
+  font-size: 24px; 
+  color: #333; 
 }
 
-/* Content grid layout */
 .content-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -194,7 +197,6 @@ body {
   font-size: 18px;
 }
 
-/* Dark mode content box */
 .layout.dark .content-box {
   background-color: #333;
 }

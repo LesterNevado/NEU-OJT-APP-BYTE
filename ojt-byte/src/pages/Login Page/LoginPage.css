@@ -1,12 +1,18 @@
+.welcome h1, .login h1 {
+  color: white;
+  text-shadow: 3px 3px 8px black;  
+}
+
 .login-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh; 
-  background-image: url('./login background.jpg');
-  background-size: cover;
+  background-image: url('./NEU.jpg');
+  background-size: cover; 
   background-position: center;
+  background-attachment: fixed;  
   font-family: Arial, sans-serif;
   color: white;
   text-align: center;
@@ -50,6 +56,8 @@
 
 .login img {
   margin-bottom: 20px;
+  max-width: 100%;
+  height: auto;
 }
 
 .google-login-button {
