@@ -35,8 +35,8 @@
 }
 
 .sidebar.collapsed .hamburger-btn {
-  top: 15px;
-  right: 10px;
+  top: 30px;
+  right: 47px;
 }
 
 .hamburger-btn:hover {
@@ -48,15 +48,21 @@
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  transition: opacity 0.3s ease; /* Add transition for smooth effect */
 }
 
 .sidebar-logo {
-  width: 30px; /* Adjusted width to make the logo smaller */
+  width: 75px !important; /* Ensure logo size is applied */
   margin-right: 10px;
 }
 
+.sidebar.collapsed .sidebar-logo-container {
+  opacity: 0; /* Hide the logo when sidebar is collapsed */
+  pointer-events: none; /* Ensure no click events on hidden logo */
+}
+
 .sidebar-logo-title h2 {
-  font-size: 22px;
+  font-size: 15px;
   font-weight: bold;
   color: #ffca28;
   margin: 0;
