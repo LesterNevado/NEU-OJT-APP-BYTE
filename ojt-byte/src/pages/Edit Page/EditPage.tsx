@@ -4,7 +4,6 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import "./EditPage.css";
 
-
 interface User {
   uid: string;
   firstName: string;
@@ -15,42 +14,39 @@ interface User {
   academicYear: string;
   semester: string;
   adviser: string;
-  [key: string]: any; 
+  [key: string]: any; // Allows for additional properties
 }
-
 
 interface OutletContextProps {
   user: User;
 }
 
-
 const EditStudentInfo: React.FC = () => {
   const { user } = useOutletContext<OutletContextProps>();
   const db = getFirestore();
-
 
   const [formData, setFormData] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-
   const fetchUserData = async () => {
     try {
       const userDoc = doc(db, "users", user.uid);
       const docSnap = await getDoc(userDoc);
- 
+  
       if (docSnap.exists()) {
         const data = docSnap.data() as User;
- 
+  
+        // Extract first and last name from email if not already in Firestore
         if (!data.firstName || !data.lastName) {
-          const emailNamePart = user.email.split("@")[0]; 
-          const [extractedFirstName, ...rest] = emailNamePart.split(/[._]/); 
-          const extractedLastName = rest.join(" "); 
-          
+          const emailNamePart = user.email.split("@")[0]; // Get the part before '@'
+          const [extractedFirstName, ...rest] = emailNamePart.split(/[._]/); // Split by dot or underscore
+          const extractedLastName = rest.join(" "); // Join remaining parts as last name
+  
           data.firstName = extractedFirstName || "";
           data.lastName = extractedLastName || "";
         }
- 
+  
         setFormData({ ...data });
       } else {
         setError("No user data found.");
@@ -63,17 +59,14 @@ const EditStudentInfo: React.FC = () => {
     }
   };
 
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => prev && { ...prev, [name]: value });
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData) return;
-
 
     try {
       const userDoc = doc(db, "users", formData.uid);
@@ -86,15 +79,12 @@ const EditStudentInfo: React.FC = () => {
     }
   };
 
-
   useEffect(() => {
     if (user) fetchUserData();
   }, [user]);
 
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
-
 
   return (
     <div className="edit-student-info">
@@ -180,6 +170,5 @@ const EditStudentInfo: React.FC = () => {
     </div>
   );
 };
-
 
 export default EditStudentInfo;

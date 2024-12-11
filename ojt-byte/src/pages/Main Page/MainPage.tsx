@@ -24,7 +24,7 @@ const MainPage: React.FC = () => {
 
         if (docSnap.exists()) {
           const userData = docSnap.data();
-          setUser({ ...userData, uid: currentUser.uid }); 
+          setUser({ ...userData, uid: currentUser.uid }); // Include uid
           setIsAdviser(userData?.role === "Adviser");
         } else {
           console.error("No user data found in Firestore.");
@@ -37,7 +37,7 @@ const MainPage: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      setUser(null); 
+      setUser(null); // Clear user state
       await auth.signOut();
       navigate("/login");
     } catch (error) {
@@ -54,7 +54,7 @@ const MainPage: React.FC = () => {
       <Sidebar user={user} isAdviser={isAdviser} handleLogout={handleLogout} />
 
       <div className="content">
-        <Outlet context={{ user, isAdviser }} />
+        <Outlet context={{ user, isAdviser}} />
       </div>
 
       <button className="theme-toggle-btn" onClick={toggleTheme}>

@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import LoginPage from "../pages/Login Page/LoginPage";
 import MainPage from "../pages/Main Page/MainPage";
-import HomePage from "../pages/Home Page/HomePage";
-import UploadPage from "../pages/Upload Page/UploadPage";
+import Home from "../pages/Home Page/Home";
+import UploadRequirements from "../pages/Upload Req Page/UploadRequirements";
 import EditPage from "../pages/Edit Page/EditPage";
+import LetterPage from "../pages/Letter Page/EndorsementLetter"
 
 const Routes = createBrowserRouter([
   {
@@ -12,23 +13,27 @@ const Routes = createBrowserRouter([
   },
   {
     path: "/",
-    element: <LoginPage />, 
+    element: <LoginPage />, // Redirect "/" to the Login Page
   },
   {
     path: "/main",
-    element: <MainPage />, 
+    element: <MainPage />, // MainPage serves as the layout
     children: [
       {
-        index: true, 
-        element: <HomePage />, 
+        index: true, // Default child route for "/main"
+        element: <Home />, // Home Page
       },
       {
         path: "upload",
-        element: <UploadPage />, 
+        element: <UploadRequirements />,
       },
       {
         path: "edit",
-        element: <EditPage /> 
+        element: <EditPage />
+      },
+      {
+        path: "letter",
+        element: <LetterPage />
       }
     ],
   },

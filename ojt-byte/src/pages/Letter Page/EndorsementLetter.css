@@ -1,0 +1,44 @@
+.requirements-status {
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+}
+
+.requirements-status h2 {
+  margin-bottom: 10px;
+}
+
+.requirements-status ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.requirements-status li {
+  margin: 5px 0;
+}
+
+.generate-button {
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.generate-button.enabled {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+
+.generate-button.enabled:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.generate-button.disabled {
+  background-color: #cccccc; /* Grey */
+  color: #666666;
+  cursor: not-allowed;
+}
+
